@@ -1,0 +1,47 @@
+services:
+  - type: web
+    name: video-analyzer-api
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt && python scripts/download_model.py
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.11
+      - key: MAX_UPLOAD_SIZE_MB
+        value: 200
+      - key: MAX_VIDEO_DURATION_SECONDS
+        value: 180
+      - key: MAX_CONCURRENT_JOBS
+        value: 1
+      - key: MAX_QUEUED_JOBS
+        value: 5
+      - key: RESULT_RETENTION_HOURS
+        value: 24
+      - key: INFERENCE_MAX_WIDTH
+        value: 960
+      - key: INFERENCE_FRAME_STRIDE
+        value: 2
+      - key: CORS_ORIGINS
+        sync: false
+      - key: AUTH_REQUIRED
+        value: "true"
+      - key: BASE44_BRIDGE_SECRET
+        sync: false
+      - key: DOWNLOAD_SIGNING_SECRET
+        sync: false
+      - key: WORKER_CALLBACK_SECRET
+        sync: false
+      - key: BASE44_CALLBACK_URL
+        sync: false
+      - key: PUBLIC_API_URL
+        sync: false
+      - key: BASE44_FILE_HOSTS
+        sync: false
+      - key: DB_PATH
+        value: /var/data/video_analyzer.sqlite3
+      - key: UPLOAD_DIR
+        value: /var/data/uploads
+      - key: RESULTS_DIR
+        value: /var/data/results

@@ -1,0 +1,26 @@
+{
+  "name": "VideoJob",
+  "type": "object",
+  "title": "Video analysis job",
+  "description": "A user's private video analysis job and its status.",
+  "properties": {
+    "owner_id": {"type": "string", "description": "Base44 user ID"},
+    "worker_job_id": {"type": "string"},
+    "status": {"type": "string", "enum": ["queued", "processing", "completed", "failed", "cancelled"], "default": "queued"},
+    "progress": {"type": "number", "minimum": 0, "maximum": 100, "default": 0},
+    "eta_seconds": {"type": "number"},
+    "source_file_url": {"type": "string"},
+    "result_file_url": {"type": "string"},
+    "report_file_url": {"type": "string"},
+    "error_message": {"type": "string"},
+    "settings": {"type": "object"},
+    "summary": {"type": "object"}
+  },
+  "required": ["owner_id", "status"],
+  "rls": {
+    "create": false,
+    "read": {"data.owner_id": "{{user.id}}"},
+    "update": {"data.owner_id": "{{user.id}}"},
+    "delete": {"data.owner_id": "{{user.id}}"}
+  }
+}
